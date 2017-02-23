@@ -11,6 +11,7 @@ AWS_ACCOUNT=1234567890`
 - `aws cli` installed (`pip install --upgrade --user awscli`)
 - ~/.aws/credentials and ~/.aws/config setup and configured
 
+
     sh -x ./example-create.sh 
     sh -x ./example-test.sh > result.json 
     node read.js ./result.json 
