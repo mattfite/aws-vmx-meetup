@@ -12,6 +12,7 @@ AWS_ACCOUNT=1234567890`
 - ~/.aws/credentials and ~/.aws/config setup and configured
 
 
+```shell
     sh -x ./example-create.sh 
     sh -x ./example-test.sh > result.json 
     node read.js ./result.json 
@@ -19,3 +20,4 @@ AWS_ACCOUNT=1234567890`
     sh -x ./example-test.sh > result.json 
     node read.js ./result.json 
     sh -x ./example-cleanup.sh 
+```
