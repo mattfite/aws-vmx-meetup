@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  CFExample: 
+    Type: "AWS::Lambda::Function"
+    Properties: 
+      Handler: "myHandler.handler"
+      Role: "arn:aws:iam::112428243612:role/helloworld"
+      Code: 
+        S3Bucket: "mattfite-lambda-functions"
+        S3Key: "myHandler.zip"
+      Runtime: "nodejs4.3"
+      Timeout: "25"
+Outputs:
+  LambdaFunctions:
+    Value:
+      Ref: CFExample
