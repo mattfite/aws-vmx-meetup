@@ -20,4 +20,17 @@ AWS_ACCOUNT=1234567890`
     sh -x ./example-test.sh > result.json 
     node read.js ./result.json 
     sh -x ./example-cleanup.sh 
+
+    aws cloudformation create-stack \
+        --stack-name example-stack \
+        --template-body \
+        file://example-stack.yaml
+    aws cloudformation describe-stacks \
+        --stack-name example-stack
+    aws cloudformation describe-stacks \
+        --stack-name example-stack \
+        --query Stacks[0].StackStatus
+    aws cloudformation delete-stack \
+        --stack-name example-stack
+
 ```
