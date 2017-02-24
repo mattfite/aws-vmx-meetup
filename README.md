@@ -11,6 +11,14 @@ AWS_ACCOUNT=1234567890`
 - `aws cli` installed (`pip install --upgrade --user awscli`)
 - ~/.aws/credentials and ~/.aws/config setup and configured
 
+## Serverless Application Model
+Let's start using the [AWS Serverless Application Model (SAM)](https://aws.amazon.com/blogs/compute/introducing-simplified-serverless-application-deplyoment-and-management/).
+
+References:
+- [Create Your Own Serverless Application](http://docs.aws.amazon.com/lambda/latest/dg/serverless-deploy-wt.html)
+- [Using an automation pipeline](http://docs.aws.amazon.com/lambda/latest/dg/automating-deployment.html)
+- [HOWTO on github](https://github.com/awslabs/serverless-application-model/blob/master/HOWTO.md)
+
 
 ```shell
     sh -x ./example-create.sh 
@@ -32,5 +40,14 @@ AWS_ACCOUNT=1234567890`
         --query Stacks[0].StackStatus
     aws cloudformation delete-stack \
         --stack-name example-stack
+
+    aws cloudformation package \
+        --template-file example-stack.yaml \
+        --output-template-file serverless-output.yaml \
+        --s3-bucket www.zrofux.com
+    aws cloudformation deploy \
+        --template-file serverless-output.yaml \
+        --stack-name example-stack \
+        --capabilities CAPABILITY_IAM
 
 ```
