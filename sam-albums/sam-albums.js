@@ -3,9 +3,8 @@
 console.log('Loading function');
 
 var AWS = require('aws-sdk');
-// TODO
-// this could be passed in with Environment variable
-const myBucket = 'mattfite.photo';
+
+const myBucket = process.env.BUCKET_NAME;
 
 const createResponse = (statusCode, body) => {
     return {
@@ -14,6 +13,7 @@ const createResponse = (statusCode, body) => {
         "body": body || ""
     };
 };
+
 
 exports.getAlbums = (event, context, callback) => {
     var s3 = new AWS.S3();
