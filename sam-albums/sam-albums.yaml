@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SAM album deployment
+Resources:
+  GetImagesFunction:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      Handler: sam-albums.getImages
+      Runtime: nodejs4.3
+      Policies: AmazonS3ReadOnlyAccess
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /albums/{albumId}
+            Method: get
+  GetAlbumsFunction:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      Handler: sam-albums.getAlbums
+      Runtime: nodejs4.3
+      Policies: AmazonS3ReadOnlyAccess
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /albums
+            Method: get
+Outputs:
+  GetAlbums:
+    Value:
+      Ref: GetAlbumsFunction
+  GetImages:
+    Value:
+      Ref: GetImagesFunction
+  RestUri:
+    Value:
+      Ref: ServerlessRestApi
+  Region:
+    Value:
+      Ref: AWS::Region
+  Uri:
+    Value:
+      Fn::Join:
+        - ''
+        - - 'https://'
+          - !Ref ServerlessRestApi
+          - ".execute-api."
+          - !Ref AWS::Region
+          - ".amazonaws.com/"
+          - 'Prod/'
