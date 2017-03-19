@@ -29,11 +29,17 @@ References:
 
     ##### status #####
     aws cloudformation describe-stacks \
-        --stack-name example-stack
+        --stack-name hello-stack
     aws cloudformation describe-stacks \
-        --stack-name example-stack \
+        --stack-name hello-stack \
         --query Stacks[0].StackStatus
+
+    #### test ####
+    # http URI/albums
+    # http URI/albums/album1
+    # e.g., http https://5m6xjt1jfj.execute-api.us-west-2.amazonaws.com/Prod/albums/album1
+
     ##### delete #####
     aws cloudformation delete-stack \
-        --stack-name example-stack
+        --stack-name hello-stack
 ```
