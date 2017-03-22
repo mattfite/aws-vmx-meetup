@@ -22,8 +22,8 @@ mattfite.com/
 
 ## Testing
 ```bash
-http http://<ENDPOINT>/<TAG>/albums
-http http://<ENDPOINT>/<TAG>/albums/{album1}
+http https://<ENDPOINT>/<TAG>/albums
+http https://<ENDPOINT>/<TAG>/albums/{album1}
 ```
 
 
