@@ -44,7 +44,7 @@ References:
     aws cloudformation package \
         --template-file example-stack.yaml \
         --output-template-file serverless-output.yaml \
-        --s3-bucket www.zrofux.com
+        --s3-bucket meetup-stacks
     aws cloudformation deploy \
         --template-file serverless-output.yaml \
         --stack-name example-stack \

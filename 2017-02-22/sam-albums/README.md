@@ -6,6 +6,26 @@ and deploy AWS APIGateway endpoints backed by AWS Lambda functions.
 The scripts below expect:
 - `aws cli` installed (`pip install --upgrade --user awscli`)
 - ~/.aws/credentials and ~/.aws/config setup and configured
+- assume you have an S3 bucket that exists with the expected 
+directory structure (described below)
+
+## Bucket structure
+```
+mattfite.com/
+|-- albums
+    |-- album1
+    |-- album2
+    |-- ...
+    |-- people
+    `-- places
+```
+
+## Testing
+```bash
+http http://<ENDPOINT>/<TAG>/albums
+http http://<ENDPOINT>/<TAG>/albums/{album1}
+```
+
 
 ## Serverless Application Model
 Let's start using the [AWS Serverless Application Model (SAM)](https://aws.amazon.com/blogs/compute/introducing-simplified-serverless-application-deplyoment-and-management/).
@@ -21,9 +41,9 @@ References:
     aws cloudformation package \
         --template-file sam-albums.yaml \
         --output-template-file new_hello.yaml \
-        --s3-bucket www.zrofux.com
+        --s3-bucket meetup-stacks
     aws cloudformation deploy \
-        --template-file /Users/matt/presentation/sam-albums/new_hello.yaml \
+        --template-file /Users/matt/Projects/aws-vmx-meetup/2017-02-22/sam-albums/new_hello.yaml \
         --stack-name hello-stack \
         --capabilities CAPABILITY_IAM
 
