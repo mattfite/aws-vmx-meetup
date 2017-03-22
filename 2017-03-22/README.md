@@ -5,7 +5,7 @@ References:
 
 
 ```bash
-zip -r encryption_proxy.zip decryption.py encryption.py
+zip -r encryption_proxy.zip decryption.js encryption.js
 
 aws s3 cp encryption_proxy.zip s3://meetup-stacks
 
