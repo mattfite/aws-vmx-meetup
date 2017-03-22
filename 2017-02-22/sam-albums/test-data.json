@@ -1,0 +1,53 @@
+{
+    "resource": "/albums/{albumId}",
+    "path": "/albums/album2",
+    "httpMethod": "GET",
+    "headers": {
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate",
+        "CloudFront-Forwarded-Proto": "https",
+        "CloudFront-Is-Desktop-Viewer": "true",
+        "CloudFront-Is-Mobile-Viewer": "false",
+        "CloudFront-Is-SmartTV-Viewer": "false",
+        "CloudFront-Is-Tablet-Viewer": "false",
+        "CloudFront-Viewer-Country": "US",
+        "Host": "5m6xjt1jfj.execute-api.us-west-2.amazonaws.com",
+        "User-Agent": "HTTPie/0.9.8",
+        "Via": "1.1 7e64e4b96056b39509b7251802cd8da7.cloudfront.net (CloudFront)",
+        "X-Amz-Cf-Id": "LE2VMTIxvUw-OdTpBgKtrHpOSZTbjlQmw3cD7kj0RdtJ3LuFPZ3Grg==",
+        "X-Amzn-Trace-Id": "Root=1-58b1f272-2c27fd641b6d1a8342a44d6e",
+        "X-Forwarded-For": "24.94.25.219, 205.251.202.54",
+        "X-Forwarded-Port": "443",
+        "X-Forwarded-Proto": "https"
+    },
+    "queryStringParameters": null,
+    "pathParameters": {
+        "albumId": "album2"
+    },
+    "stageVariables": null,
+    "requestContext": {
+        "accountId": "112428243612",
+        "resourceId": "8b3pnm",
+        "stage": "Prod",
+        "requestId": "a4b63d78-fb9e-11e6-9d26-e33c1a2b1fb7",
+        "identity": {
+            "cognitoIdentityPoolId": null,
+            "accountId": null,
+            "cognitoIdentityId": null,
+            "caller": null,
+            "apiKey": null,
+            "sourceIp": "24.94.25.219",
+            "accessKey": null,
+            "cognitoAuthenticationType": null,
+            "cognitoAuthenticationProvider": null,
+            "userArn": null,
+            "userAgent": "HTTPie/0.9.8",
+            "user": null
+        },
+        "resourcePath": "/albums/{albumId}",
+        "httpMethod": "GET",
+        "apiId": "5m6xjt1jfj"
+    },
+    "body": null,
+    "isBase64Encoded": false
+}
