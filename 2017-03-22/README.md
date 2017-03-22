@@ -5,9 +5,11 @@ References:
 
 
 ```bash
-zip -r encryption_proxy.zip decryption.js encryption.js
+# not needed if we declare the handler and let cloudformation
+# package handle this for us
 
-aws s3 cp encryption_proxy.zip s3://meetup-stacks
+#zip -r encryption_proxy.zip decryption.js encryption.js
+#aws s3 cp encryption_proxy.zip s3://meetup-stacks
 
 aws cloudformation package \
         --template-file template.yaml \
@@ -15,7 +17,7 @@ aws cloudformation package \
         --output-template-file new-template.yaml
 
 aws cloudformation deploy \
-        --template-file /Users/matt/Downloads/serverless-application-model-master/examples/2016-10-31/encryption_proxy/new-template.yaml \
+        --template-file /Users/matt/Projects/aws-vmx-meetup/2017-03-22/new-template.yaml \
         --stack-name encryption-stack \
         --capabilities CAPABILITY_IAM
 
