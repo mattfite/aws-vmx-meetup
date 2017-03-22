@@ -7,11 +7,11 @@ References:
 ```bash
 zip -r encryption_proxy.zip decryption.py encryption.py
 
-aws s3 cp encryption_proxy.zip s3://www.zrofux.com
+aws s3 cp encryption_proxy.zip s3://meetup-stacks
 
 aws cloudformation package \
         --template-file template.yaml \
-        --s3-bucket www.zrofux.com \
+        --s3-bucket meetup-stacks \
         --output-template-file new-template.yaml
 
 aws cloudformation deploy \
