@@ -1,36 +1,71 @@
 'use strict';
 
-var AWS = require('aws-sdk');
+const AWS = require('aws-sdk'),
+      kms = new AWS.KMS();
 
-var kms = new AWS.KMS();
+/**
+ * Encrypts a message
+ * @param {string} key - Key to use for encryption
+ * @param {string} message - Message to encrypt
+ * @returns {Promise<string>} Base64 encoded encrypted message on resolve or error message on reject
+ */
+const encrypt = (key, message) => {
+    const params = {
+        KeyId: key,
+        Plaintext: message
+    };
 
+    return new Promise((resolve, reject) => {
+        kms.encrypt(params, function(err, data) {
+            if (err) {
+                return reject(err);
+            }
+
+            let encryptedData = new Buffer(data.CiphertextBlob).toString('base64');
+
+            return resolve(encryptedData);
+        });
+    });
+};
+
+/**
+ * Creates a JSON HTTP response object
+ * @param {number} statusCode - HTTP status code
+ * @param {Object} body - Contents of the response
+ * @returns {Object}
+ */
 const createResponse = (statusCode, body) => {
+    body = body || {};
+
     return {
-        "headers": { 'Content-Type': 'application/json' },
-        "statusCode": statusCode,
-        "body": body || ""
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        statusCode: statusCode,
+        body: JSON.stringify(body)
     };
 };
 
-exports.post = (event, context, callback) => {
-	const key_id = process.env.keyId;
-	var message = event.body;
-	console.log("event.body: " + message);
-	var params = { KeyId: key_id, Plaintext: message };
-	
-	kms.encrypt(params, function(err, data) {
-                if (err) console.log(err, err.stack); // an error occurred
-                else {
-                    	var encrypted_data = "foo";
-			var json = {};
-			var response;
+/**
+ * Encrypts and creates a JSON HTTP response object
+ * @param {Object} event - ?
+ * @returns {Promise<Object>} HTTP response object on resolve or reject
+ */
+const post = (event, context, callback) => {
+    const key = process.env.keyId,
+          message = event.body;
 
-                        encrypted_data = new Buffer(data.CiphertextBlob).toString('base64');
-                        console.log("encrypted_message: " + encrypted_data);
-                        json = {'data': encrypted_data};
-                        response = createResponse(200, JSON.stringify(json));
-                        console.log("response: " + response);
-			callback(null, response);
-                }
+    encrypt(key, message)
+        .then((encryptedData) => {
+            callback(null, createResponse(200, {
+                data: encryptedData
+            }));
+        })
+        .catch((err) => {
+            callback(err, createResponse(500, {
+                error: err.stack
+            }));
         });
 };
+
+module.exports.post = post;

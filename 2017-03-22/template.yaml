@@ -115,7 +115,7 @@ Resources:
       Type: 'AWS::Serverless::Function'
       Properties:
         Handler: encryption.post
-        Runtime: nodejs4.3
+        Runtime: nodejs6.10
         Role: !GetAtt EncryptionServiceIAMRole.Arn
         Events:
           encryptAction:
@@ -131,7 +131,7 @@ Resources:
       Type: 'AWS::Serverless::Function'
       Properties:
         Handler: decryption.post
-        Runtime: nodejs4.3
+        Runtime: nodejs6.10
         Role: !GetAtt DecryptionServiceIAMRole.Arn
         Events:
           decryptAction:
