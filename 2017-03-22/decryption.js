@@ -1,5 +1,7 @@
 'use strict';
 
+const http = require('httpResponse');
+
 const AWS = require('aws-sdk'),
       kms = new AWS.KMS();
 
@@ -28,24 +30,6 @@ const decrypt = (message) => {
 };
 
 /**
- * Creates a JSON HTTP response object
- * @param {number} statusCode - HTTP status code
- * @param {Object} body - Contents of the response
- * @returns {Object}
- */
-const createResponse = (statusCode, body) => {
-    body = body || {};
-
-    return {
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        statusCode: statusCode,
-        body: JSON.stringify(body)
-    };
-};
-
-/**
  * Decrypts and creates a JSON HTTP response object
  * @param {Object} event - ?
  * @returns {Promise<Object>} HTTP response object on resolve or reject
@@ -57,12 +41,12 @@ const post = (event, context, callback) => {
 
     decrypt(message)
         .then((text) => {
-            callback(null, createResponse(200, {
+            callback(null, http.create(200, {
                 data: text
             }));
         })
         .catch((err) => {
-            callback(err, createResponse(500, {
+            callback(err, http.create(500, {
                 error: err
             }));
         });
