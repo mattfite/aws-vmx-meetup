@@ -1,0 +1,133 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Mappings: 
+    RegionMap: 
+      us-east-1: 
+        "AMI": "ami-6411e20d"
+      us-west-1: 
+        "AMI": "ami-c9c7978c"
+      us-west-2: 
+        "AMI": "ami-4836a428"
+      eu-west-1: 
+        "AMI": "ami-37c2f643"
+      ap-southeast-1: 
+        "AMI": "ami-66f28c34"
+      ap-northeast-1: 
+        "AMI": "ami-9c03a89d"
+Resources:
+    myRoute:
+        Type: "AWS::EC2::Route"
+        DependsOn: myInternetGateway
+        Properties:
+            RouteTableId: !Ref myRouteTable
+            DestinationCidrBlock: 0.0.0.0/0
+            GatewayId: !Ref myInternetGateway
+    myRouteTable:
+        Type: "AWS::EC2::RouteTable"
+        Properties:
+            VpcId: !Ref myVPC
+    mySubnetRouteTableAssociation:
+        Type: "AWS::EC2::SubnetRouteTableAssociation"
+        Properties:
+            SubnetId: !Ref mySubnet
+            RouteTableId: !Ref myRouteTable
+    AttachGateway:
+        Type: "AWS::EC2::VPCGatewayAttachment"
+        Properties:
+            VpcId: !Ref myVPC
+            InternetGatewayId: !Ref myInternetGateway
+    myInternetGateway:
+        Type: "AWS::EC2::InternetGateway"
+        Properties:
+            Tags:
+            - Key: "Department"
+              Value: "Development"
+            - Key: "Name"
+              Value: "DevelopmentIGW"
+    myVPC:
+        Type: "AWS::EC2::VPC"
+        Properties:
+            CidrBlock: "10.0.0.0/16"
+            Tags:
+            - Key: "Department"
+              Value: "Development"
+            - Key: "Name"
+              Value: "DevelopmentVPC"
+    mySG:
+        Type: AWS::EC2::SecurityGroup
+        Properties:
+            GroupDescription: Allow us to ssh to host
+            VpcId: !Ref myVPC
+            SecurityGroupIngress:
+            - IpProtocol: tcp
+              FromPort: '22'
+              ToPort: '22'
+              CidrIp: 0.0.0.0/0
+            - IpProtocol: tcp
+              FromPort: '80'
+              ToPort: '80'
+              CidrIp: 0.0.0.0/0
+    myEC2: 
+        Type: "AWS::EC2::Instance"
+        Metadata:
+            AWS::CloudFormation::Init:
+                config:
+                    packages:
+                        yum:
+                            httpd: []
+                    files:
+                        "/var/www/html/index.html":
+                            content: "<html><body>Hello world!</body></html>"
+                            mode: '000644'
+                            owner: root
+                            group: root
+                    services:
+                        sysvinit:
+                            httpd:
+                                enabled: "true"
+                                ensureRunning: "true"
+                                sources:
+                                    - "/var/www/html"
+                            sendmail:
+                                enabled: "false"
+                                ensureRunning: "false"
+        Properties: 
+            InstanceType: "t2.micro"
+            ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "AMI"]
+            KeyName: "laptop"
+            UserData:
+                Fn::Base64: !Sub | 
+                  #!/bin/bash
+                  echo "testing" > /home/ec2-user/testfile
+                  chown ec2-user.ec2-user /home/ec2-user/testfile
+                  yum install -y aws-cfn-bootstrap
+                  /opt/aws/bin/cfn-init -s ${AWS::StackName} -r myEC2 --region ${AWS::Region}
+                  /opt/aws/bin/cfn-hup || error_exit 'Failed to start cfn-hup'
+                  /opt/aws/bin/cfn-signal -e $? -s ${AWS::StackName} -r myEC2 --region ${AWS::Region}
+                  echo "complete" >> /home/ec2-user/testfile
+            NetworkInterfaces: 
+                - AssociatePublicIpAddress: "true"
+                  DeviceIndex: "0"
+                  GroupSet:
+                      - !Ref mySG
+                  SubnetId: !Ref mySubnet
+    mySubnet:
+        Type: AWS::EC2::Subnet
+        Properties:
+            VpcId: !Ref myVPC
+            CidrBlock: 10.0.0.0/24
+            AvailabilityZone: "us-west-2a"
+            MapPublicIpOnLaunch: true
+            Tags:
+            - Key: "Department"
+              Value: "Development"
+            - Key: "Name"
+              Value: "Dev Subnet"
+Outputs:
+    StackVPC:
+        Description: The logical name of the VPC
+        Value: !Ref myVPC
+        Export:
+            Name: !Sub "${AWS::StackName}-VPCID"
+    StackSg:
+        Description: The logical name of the security group
+        Value: !Ref mySG

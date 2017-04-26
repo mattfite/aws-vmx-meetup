@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+    myVPC:
+        Type: "AWS::EC2::VPC"
+        Properties:
+            CidrBlock: "10.0.0.0/16"
+            Tags:
+            - Key: "Department"
+              Value: "Development"
+            - Key: "Name"
+              Value: "DevelopmentVPC"
+Outputs:
+    StackVPC:
+        Description: The logical name of the VPC
+        Value: !Ref myVPC
+        Export:
+            Name: !Sub "${AWS::StackName}-VPCID"
