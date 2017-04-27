@@ -130,7 +130,6 @@ function isTagless(instance) {
             if(instance.Tags[0].Key == "Name" && instance.Tags[0].Value === "")
                 return true;
     } catch(e) {}
-    console.log("isTagless() false ");
     return false;
 }
 function isTagless2(instance) {
@@ -142,7 +141,7 @@ function isTagless2(instance) {
                 return true;
         var found = false;
         for(let s of instance.Tags) {
-            if(s.Key == "Development" && s.Value === "" )
+            if(s.Key == "Department" && s.Value === "" )
                 found = true;
         }
         console.log("isTagless2() returning " + !found );
