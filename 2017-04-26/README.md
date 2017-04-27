@@ -65,4 +65,19 @@
 
     aws cloudformation delete-stack \
             --stack-name auto-az-stack
+
+    aws cloudformation package \
+            --template-file terminate.yaml \
+            --s3-bucket meetup-stacks \
+            --output-template-file new-template.yaml
+
+    aws cloudformation deploy \
+            --template-file /Users/matt/Projects/aws-vmx-meetup/2017-04-26/new-template.yaml \
+            --stack-name terminate-stack \
+            --capabilities CAPABILITY_IAM \
+            --parameter-overrides Rate='rate(2 minutes)'
+
+    aws cloudformation delete-stack \
+            --stack-name terminate-stack
+
 ```

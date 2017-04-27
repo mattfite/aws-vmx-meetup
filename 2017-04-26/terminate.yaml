@@ -1,0 +1,23 @@
+﻿AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: 'Given a list of regions, find and terminate instances'
+Parameters:
+  Rate:
+    Type: String
+    Default: rate(12 hours)
+Resources:
+  EnterpriseTerminateInstances:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: terminate.handler
+      Runtime: nodejs6.10
+      CodeUri: .
+      Description: 'Given a list of regions, find and terminate instances'
+      MemorySize: 128
+      Timeout: 10
+      Role: 'arn:aws:iam::112428243612:role/EnterpriseSchedulerRole'
+      Events:
+        Schedule1:
+          Type: Schedule
+          Properties:
+            Schedule: !Ref Rate
