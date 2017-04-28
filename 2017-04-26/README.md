@@ -42,7 +42,7 @@ The only sections that are required are:
 
 all other sections are optional.
 
-##Example 1: Create a VPC
+## Example 1: Create a VPC
 
 
 ```shell
@@ -59,7 +59,7 @@ all other sections are optional.
         --stack-name vpc-stack
 ```
 
-##Example 2: Create a Security Group
+## Example 2: Create a Security Group
 Building on the previous example, create a security group that allows ingress and 
 egress for:
 - HTTP: port 80
@@ -82,7 +82,7 @@ This stack depends on the previous stack `vpc-stack` to have been created
         --stack-name sg-stack
 ```
 
-##Example 3: Create an EC2 Instance
+## Example 3: Create an EC2 Instance
 
 ```shell
     aws cloudformation create-stack \
@@ -110,7 +110,7 @@ This stack depends on the previous stack `vpc-stack` to have been created
         --stack-name ec2-stack
 ```
 
-##Example 4: Run a periodic function
+## Example 4: Run a periodic function
 
 ```shell
     aws cloudformation package \
@@ -128,7 +128,7 @@ This stack depends on the previous stack `vpc-stack` to have been created
             --stack-name canary-stack
 ```
 
-##Example 5: Create an load-balanced, auto-scaling, multi-AZ Web Server
+## Example 5: Create an load-balanced, auto-scaling, multi-AZ Web Server
 
 This example creates an load-balanced, auto-scaling, multi-AZ web server that
 runs an Apache web server with a custom page.
@@ -152,7 +152,7 @@ runs an Apache web server with a custom page.
             --stack-name auto-az-stack
 ```
 
-##Example 6: Lambda 'Chaos Primate'
+## Example 6: Lambda 'Chaos Primate'
 This example helps validate that instances created in the auto-az stack will 
 self-heal, because it will terminate instances it finds.
 
