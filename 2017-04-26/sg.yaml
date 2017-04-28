@@ -1,19 +1,18 @@
+---
 AWSTemplateFormatVersion: "2010-09-09"
+Description: Create a security group.  Depends on the VPC created in the 
+    accompanying directory, vpc.yaml. Exports the sg
+Parameters:
+  VPCStack:
+    Type: String
 Resources:
-    myVPC:
-        Type: "AWS::EC2::VPC"
-        Properties:
-            CidrBlock: "10.0.0.0/16"
-            Tags:
-            - Key: "Department"
-              Value: "Development"
-            - Key: "Name"
-              Value: "DevelopmentVPC"
     mySG:
         Type: AWS::EC2::SecurityGroup
         Properties:
             GroupDescription: Allow ssh to host
-            VpcId: !Ref myVPC
+            VpcId:
+              Fn::ImportValue:
+                !Sub "${VPCStack}-VPCID"
             SecurityGroupIngress:
             - IpProtocol: tcp
               FromPort: '22'
@@ -25,11 +24,8 @@ Resources:
               ToPort: '22'
               CidrIp: 0.0.0.0/0
 Outputs:
-    StackVPC:
-        Description: The logical name of the VPC
-        Value: !Ref myVPC
-        Export:
-            Name: !Sub "${AWS::StackName}-VPCID"
     StackSg:
         Description: The logical name of the security group
         Value: !Ref mySG
+        Export:
+            Name: !Sub "${AWS::StackName}-SGID"

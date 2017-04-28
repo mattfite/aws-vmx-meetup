@@ -13,8 +13,9 @@
 
     aws cloudformation create-stack \
         --stack-name sg-stack \
-        --template-body \
-        file://sg.yaml
+        --template-body file://sg.yaml \
+        --parameters ParameterKey=VPCStack,ParameterValue=vpc-stack,UsePreviousValue=false
+
     aws cloudformation describe-stacks \
         --stack-name sg-stack
     aws cloudformation describe-stacks \

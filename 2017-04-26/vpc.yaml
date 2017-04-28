@@ -1,4 +1,6 @@
+---
 AWSTemplateFormatVersion: "2010-09-09"
+Description: Create a VPC and export it so that we can begin building upon it
 Resources:
     myVPC:
         Type: "AWS::EC2::VPC"
