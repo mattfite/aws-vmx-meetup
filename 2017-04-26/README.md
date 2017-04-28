@@ -26,8 +26,20 @@
 
     aws cloudformation create-stack \
         --stack-name ec2-stack \
-        --template-body \
-        file://ec2.yaml
+        --template-body file://ec2.yaml \
+        --parameters '[
+                       {
+                        "ParameterKey": "VPCStack",
+                        "ParameterValue": "vpc-stack",
+                        "UsePreviousValue": false
+                       },
+                       {
+                        "ParameterKey": "SGStack",
+                        "ParameterValue": "sg-stack",
+                        "UsePreviousValue": false
+                       }
+                      ]'
+
     aws cloudformation describe-stacks \
         --stack-name ec2-stack
     aws cloudformation describe-stacks \

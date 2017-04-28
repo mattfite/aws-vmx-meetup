@@ -1,4 +1,11 @@
+---
 AWSTemplateFormatVersion: "2010-09-09"
+Description: creates an EC2 instance.  uses VPC and SG modular stack definitions
+Parameters:
+    VPCStack:
+        Type: String
+    SGStack:
+        Type: String
 Mappings: 
     RegionMap: 
       us-east-1: 
@@ -24,7 +31,9 @@ Resources:
     myRouteTable:
         Type: "AWS::EC2::RouteTable"
         Properties:
-            VpcId: !Ref myVPC
+            VpcId:
+                Fn::ImportValue:
+                    !Sub "${VPCStack}-VPCID"
     mySubnetRouteTableAssociation:
         Type: "AWS::EC2::SubnetRouteTableAssociation"
         Properties:
@@ -33,7 +42,9 @@ Resources:
     AttachGateway:
         Type: "AWS::EC2::VPCGatewayAttachment"
         Properties:
-            VpcId: !Ref myVPC
+            VpcId:
+                Fn::ImportValue:
+                    !Sub "${VPCStack}-VPCID"
             InternetGatewayId: !Ref myInternetGateway
     myInternetGateway:
         Type: "AWS::EC2::InternetGateway"
@@ -43,29 +54,6 @@ Resources:
               Value: "Development"
             - Key: "Name"
               Value: "DevelopmentIGW"
-    myVPC:
-        Type: "AWS::EC2::VPC"
-        Properties:
-            CidrBlock: "10.0.0.0/16"
-            Tags:
-            - Key: "Department"
-              Value: "Development"
-            - Key: "Name"
-              Value: "DevelopmentVPC"
-    mySG:
-        Type: AWS::EC2::SecurityGroup
-        Properties:
-            GroupDescription: Allow us to ssh to host
-            VpcId: !Ref myVPC
-            SecurityGroupIngress:
-            - IpProtocol: tcp
-              FromPort: '22'
-              ToPort: '22'
-              CidrIp: 0.0.0.0/0
-            - IpProtocol: tcp
-              FromPort: '80'
-              ToPort: '80'
-              CidrIp: 0.0.0.0/0
     myEC2: 
         Type: "AWS::EC2::Instance"
         Metadata:
@@ -108,12 +96,15 @@ Resources:
                 - AssociatePublicIpAddress: "true"
                   DeviceIndex: "0"
                   GroupSet:
-                      - !Ref mySG
+                      - Fn::ImportValue:
+                          !Sub "${SGStack}-SGID"
                   SubnetId: !Ref mySubnet
     mySubnet:
         Type: AWS::EC2::Subnet
         Properties:
-            VpcId: !Ref myVPC
+            VpcId:
+                Fn::ImportValue:
+                    !Sub "${VPCStack}-VPCID"
             CidrBlock: 10.0.0.0/24
             AvailabilityZone: "us-west-2a"
             MapPublicIpOnLaunch: true
@@ -123,11 +114,8 @@ Resources:
             - Key: "Name"
               Value: "Dev Subnet"
 Outputs:
-    StackVPC:
-        Description: The logical name of the VPC
-        Value: !Ref myVPC
+    StackInstance:
+        Description: The logical name of the instance
+        Value: !Ref myEC2
         Export:
-            Name: !Sub "${AWS::StackName}-VPCID"
-    StackSg:
-        Description: The logical name of the security group
-        Value: !Ref mySG
+            Name: !Sub "${AWS::StackName}-Instance"
