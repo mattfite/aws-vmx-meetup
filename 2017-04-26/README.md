@@ -122,7 +122,7 @@ This stack depends on the previous stack `vpc-stack` to have been created
             --template-file /Users/matt/Projects/aws-vmx-meetup/2017-04-26/new-template.yaml \
             --stack-name canary-stack \
             --capabilities CAPABILITY_IAM \
-            --parameter-overrides NotificationEmail=mattfite@gmail.com
+            --parameter-overrides NotificationEmail=mattfite-auto@gmail.com
 
     aws cloudformation delete-stack \
             --stack-name canary-stack
@@ -145,7 +145,7 @@ runs an Apache web server with a custom page.
         --capabilities CAPABILITY_IAM \
         --parameter-overrides \
             InstanceType=t2.micro \
-            OperatorEMail='mattfite@gmail.com' \
+            OperatorEMail='mattfite-auto@gmail.com' \
             KeyName='laptop'
 
     aws cloudformation delete-stack \
