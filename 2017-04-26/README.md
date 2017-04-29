@@ -122,7 +122,7 @@ This stack depends on the previous stack `vpc-stack` to have been created
             --template-file /Users/matt/Projects/aws-vmx-meetup/2017-04-26/new-template.yaml \
             --stack-name canary-stack \
             --capabilities CAPABILITY_IAM \
-            --parameter-overrides NotificationEmail=mattfite-auto@gmail.com
+            --parameter-overrides NotificationEmail=matthewfite-auto@gmail.com
 
     aws cloudformation delete-stack \
             --stack-name canary-stack
@@ -134,19 +134,26 @@ This example creates an load-balanced, auto-scaling, multi-AZ web server that
 runs an Apache web server with a custom page.
 
 ```shell
-    aws cloudformation package \
-        --template-file auto-az.yaml \
-        --s3-bucket meetup-stacks \
-        --output-template-file new-template.yaml
-
-    aws cloudformation deploy \
-        --template-file /Users/matt/Projects/aws-vmx-meetup/2017-04-26/new-template.yaml \
+    aws cloudformation create-stack \
         --stack-name auto-az-stack \
-        --capabilities CAPABILITY_IAM \
-        --parameter-overrides \
-            InstanceType=t2.micro \
-            OperatorEMail='mattfite-auto@gmail.com' \
-            KeyName='laptop'
+        --template-body file://auto-az.yaml \
+        --parameters '[
+                       {
+                        "ParameterKey": "InstanceType",
+                        "ParameterValue": "t2.micro",
+                        "UsePreviousValue": false
+                       },
+                       {
+                        "ParameterKey": "OperatorEMail",
+                        "ParameterValue": "matthewfite-auto@gmail.com",
+                        "UsePreviousValue": false
+                       },
+                       {
+                        "ParameterKey": "KeyName",
+                        "ParameterValue": "laptop",
+                        "UsePreviousValue": false
+                       }
+                      ]'
 
     aws cloudformation delete-stack \
             --stack-name auto-az-stack
