@@ -237,15 +237,15 @@ Resources:
                    --resource LaunchConfig \
                    --region ${AWS::Region}
 
-          /opt/aws/bin/cfn-signal -e $? \
-                   --stack ${AWS::StackName} \
-                   --resource WebServerGroup \
-                   --region ${AWS::Region}
-
           instance_id=`curl http://169.254.169.254/latest/meta-data/instance-id`
           echo "<p>Hello from " >> /var/www/html/index.html
           echo $instance_id >> /var/www/html/index.html
           echo "</p></body></html>" >> /var/www/html/index.html
+
+          /opt/aws/bin/cfn-signal -e $? \
+                   --stack ${AWS::StackName} \
+                   --resource WebServerGroup \
+                   --region ${AWS::Region}
 
   WebServerScaleUpPolicy:
     Type: AWS::AutoScaling::ScalingPolicy
