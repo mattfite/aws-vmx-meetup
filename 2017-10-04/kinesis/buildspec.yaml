@@ -1,0 +1,10 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - echo Build started on `date`
+      - mvn package
+artifacts:
+  files:
+      - target/lambda-java-example-1.0-SNAPSHOT.jar
