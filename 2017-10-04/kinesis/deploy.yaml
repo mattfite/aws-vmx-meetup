@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  ProcessKinesisRecords:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: demo.ProcessKinesisEvents::handleRequest
+      Runtime: java8
+      CodeUri: target/lambda-java-example-1.0-SNAPSHOT.jar
+      Policies: AWSLambdaKinesisExecutionRole
+      Events:
+        Stream:
+          Type: Kinesis
+          Properties:
+            Stream: !GetAtt ExampleStream.Arn
+            BatchSize: 100
+            StartingPosition: TRIM_HORIZON
+
+  ExampleStream:
+    Type: AWS::Kinesis::Stream
+    Properties:
+      ShardCount: 1
+
+Outputs:
+    Stream:
+        Description: The logical name of the Kinesis Stream
+        Value: !Ref ExampleStream
